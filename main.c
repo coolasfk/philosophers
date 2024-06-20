@@ -6,7 +6,7 @@
 /*   By: eprzybyl <eprzybyl@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 18:51:54 by eprzybyl          #+#    #+#             */
-/*   Updated: 2024/06/19 14:40:31 by eprzybyl         ###   ########.fr       */
+/*   Updated: 2024/06/20 13:08:36 by eprzybyl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,12 @@ int	main(int argc, char *argv[])
 	i = 0;
 	if (initial_check(argc, argv))
 		return (1);
+    
+	set_time(argv, argc);
+    printf("check main\n");
 	philos = philo_init(argv);
-	// set_time(argv);
+    printf("now only initializing the threads\n");
+	run_threads(philos, ft_atoi(argv[1]));
 	if (!philos)
 		manage_error("failed to intialize philosophers\n");
 
@@ -31,7 +35,6 @@ int	main(int argc, char *argv[])
 		pthread_join(current->thread, NULL);
 		current = current->next;
 		i++;
-        printf("chck loop main 34\n");
 	}
 
 	// clean-up babe

@@ -3,20 +3,20 @@ NAME = philo
 
 # Compiler
 CC = gcc 
-CFLAGS := -Wall -Wextra -Werror
+CFLAGS := -Wall -Wextra -Werror -fsanitize=thread -g
+LDFLAGS = -fsanitize=thread
 
 # Source files
 SRC = main.c \
 	checks.c \
 	kill_and_clean.c \
 	philo_life.c \
-	philo_list.c \
 	philo_init.c \
 	time.c \
+	run_threads.c \
 	utils.c \
-	errors.c
+	errors.c  \
 	  
-# SRC := $(wildcard src/*.c)
 # Object files
 OBJ = $(SRC:.c=.o)
 
@@ -27,14 +27,13 @@ OBJ = $(SRC:.c=.o)
 all: $(NAME)
 
 # Rule to link the program
-$(NAME): $(OBJ)
-	$(CC) $(OBJ) -o $(NAME)
+$(NAME): $(OBJ) 
+	$(CC) $(OBJ) -o $(NAME) $(LDFLAGS)
 
 # Rule to compile source files into object files
-%.o: %.c
+%.o: %.c 
 	$(CC) $(CFLAGS) -c $< -o $@
 
-#
 # Rule to clean object files and other temporary files
 clean:
 	rm -f $(OBJ) $(NAME)

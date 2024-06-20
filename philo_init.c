@@ -6,7 +6,7 @@
 /*   By: eprzybyl <eprzybyl@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 23:50:06 by eprzybyl          #+#    #+#             */
-/*   Updated: 2024/06/19 14:40:04 by eprzybyl         ###   ########.fr       */
+/*   Updated: 2024/06/20 15:15:44 by eprzybyl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ t_philo	*philo_init(char *argv[])
 		if (build_philos_list(&philos, i))
 			return (NULL);
 		i++;
-          printf("chck loop 29\n");
+		printf("chck loop 29\n");
 	}
 	return (philos);
 }
@@ -34,26 +34,26 @@ t_philo	*philo_init(char *argv[])
 int	build_philos_list(t_philo **philos, int i)
 {
 	t_philo	*new_philo;
-	t_philo	*ptr;
+	t_philo	*last;
 
-	new_philo = NULL;
-	new_philo = build_new_node(new_philo, i);
+	new_philo = build_new_node(NULL, i);
+	if (new_philo == NULL)
+	{
+		return (-1);
+	}
 	if (*philos == NULL)
 	{
 		*philos = new_philo;
-		new_philo->next = *philos;
+		new_philo->next = new_philo;
+		new_philo->prev = new_philo;
 	}
 	else
 	{
-		ptr = *philos;
-		while (i > 1)
-		{
-			ptr = ptr->next;
-			i--;
-              printf("chck loop 52\n");
-		}
-		ptr->next = new_philo;
+		last = (*philos)->prev;
+		last->next = new_philo;
+		new_philo->prev = last;
 		new_philo->next = *philos;
+		(*philos)->prev = new_philo;
 	}
 	return (0);
 }
@@ -64,20 +64,21 @@ t_philo	*build_new_node(t_philo *new_philo, int i)
 	if (!new_philo)
 		return (NULL);
 	new_philo->id = i;
-	new_philo->current_state = NOT_ASSIGNED;
+	new_philo->lock = FREE;
+	new_philo->time = *get_time();
 	if (pthread_mutex_init(&new_philo->fork, NULL) != 0)
 	{
 		free(new_philo);
 		return (NULL);
 	}
-      printf("chck loop 73\n");
+    /*
 	if (pthread_create(&new_philo->thread, NULL, philo_life, new_philo) != 0)
 	{
 		manage_error("failed to create thread");
 		pthread_mutex_destroy(&new_philo->fork);
 		free(new_philo);
 		return (NULL);
-	}
-      printf("chck loop 81\n");
+	}*/
+
 	return (new_philo);
 }
