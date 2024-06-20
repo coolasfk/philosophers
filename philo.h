@@ -6,7 +6,7 @@
 /*   By: eprzybyl <eprzybyl@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 10:27:58 by eprzybyl          #+#    #+#             */
-/*   Updated: 2024/06/20 21:10:18 by eprzybyl         ###   ########.fr       */
+/*   Updated: 2024/06/21 00:16:13 by eprzybyl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@ typedef struct s_philo
 	int				total_philo;
 	pthread_t		thread;
 	t_time			time;
+	int				time_left;
 	struct s_philo	*next;
 	struct s_philo	*prev;
 
@@ -69,6 +70,7 @@ int					ft_atoi(const char *s);
 // checks
 int					initial_check(int argc, char *argv[]);
 // kill_and clean
+void clean_up(t_philo *philos, int num_philos) ;
 // philo_life
 void				*philo_life(void *arg);
 void				eating(t_philo *philo, int *eaten, int *array_lock);
@@ -77,10 +79,10 @@ int					locks_status(int *array, int left, int right, int lock);
 // time
 t_time				*set_time(char **argv, int argc);
 t_time				*get_time(void);
-void				ft_usleep(long long activity_time);
+int					ft_usleep(long long activity_time, int time_left);
 long long			current_time(void);
 // errors
 int					manage_error(char *str);
 // run_threads
-void				run_threads(t_philo *philos, int num_philo);
+void				run_threads(t_philo *philo, int num_philo);
 #endif

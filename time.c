@@ -6,7 +6,7 @@
 /*   By: eprzybyl <eprzybyl@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 23:49:55 by eprzybyl          #+#    #+#             */
-/*   Updated: 2024/06/20 17:50:20 by eprzybyl         ###   ########.fr       */
+/*   Updated: 2024/06/21 00:09:08 by eprzybyl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,17 +51,34 @@ long long	current_time(void)
 	return (milliseconds);
 }
 
-void	ft_usleep(long long activity_time)
+int	ft_usleep(long long activity_time, int time_left)
 {
 	long long end_time;
 	long long time;
+	long long start_time;
 
 	time = current_time();
+	start_time = time;
 	end_time = time + activity_time;
 	while (1)
 	{
 		time = current_time();
+        /*
+        if(time_left != -100)
+        printf("--------time check: time left: %d, time which passed:  %lld\n", time_left, time - start_time  );
+*/
+
+		if (time_left != -100 && time - start_time > time_left)
+		{
+			printf("------------------------------------philo died\n");
+			return (1);
+		}
+
 		if (time == end_time || time > end_time)
 			break ;
 	}
+	if (time_left != -100)
+		return (time_left -= activity_time);
+
+	return (0);
 }

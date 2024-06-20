@@ -6,7 +6,7 @@
 /*   By: eprzybyl <eprzybyl@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 23:50:06 by eprzybyl          #+#    #+#             */
-/*   Updated: 2024/06/20 15:15:44 by eprzybyl         ###   ########.fr       */
+/*   Updated: 2024/06/21 00:09:59 by eprzybyl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,8 +64,11 @@ t_philo	*build_new_node(t_philo *new_philo, int i)
 	if (!new_philo)
 		return (NULL);
 	new_philo->id = i;
-	new_philo->lock = FREE;
-	new_philo->time = *get_time();
+    t_time *time;
+    time = get_time();
+	new_philo->time = *time;
+    new_philo->time.start = current_time();
+    new_philo->time_left = time->time_to_die;
 	if (pthread_mutex_init(&new_philo->fork, NULL) != 0)
 	{
 		free(new_philo);
