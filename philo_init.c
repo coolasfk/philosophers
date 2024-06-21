@@ -6,7 +6,7 @@
 /*   By: eprzybyl <eprzybyl@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 23:50:06 by eprzybyl          #+#    #+#             */
-/*   Updated: 2024/06/21 00:09:59 by eprzybyl         ###   ########.fr       */
+/*   Updated: 2024/06/21 23:55:11 by eprzybyl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,15 @@ t_philo	*build_new_node(t_philo *new_philo, int i)
 		free(new_philo);
 		return (NULL);
 	}
+	
+	if (pthread_mutex_init(&new_philo->lock, NULL) != 0)
+	{
+		free(new_philo);
+		return (NULL);
+	}
+	pthread_mutex_init(&new_philo->dead, NULL);
+	pthread_mutex_init(&new_philo->watch, NULL);
+	new_philo->total_philo = 4;
     /*
 	if (pthread_create(&new_philo->thread, NULL, philo_life, new_philo) != 0)
 	{
