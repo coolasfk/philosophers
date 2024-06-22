@@ -6,7 +6,7 @@
 /*   By: eprzybyl <eprzybyl@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 23:49:55 by eprzybyl          #+#    #+#             */
-/*   Updated: 2024/06/22 00:41:03 by eprzybyl         ###   ########.fr       */
+/*   Updated: 2024/06/22 22:10:19 by eprzybyl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,10 +53,97 @@ long long	current_time(void)
 
 int	ft_usleep(long long activity_time, int time_left, t_philo *philo)
 {
-	long long end_time;
-	long long time;
-	long long start_time;
+	long long	end_time;
+	long long	time;
+	long long	start_time;
+	
+
+	time = current_time();
+	start_time = time;
+	end_time = time + activity_time;
+	
+	
+	while (1)
+	{
+		time = current_time();
+		pthread_mutex_lock(&philo->watch->watch_lock);
+		if (time_left != -100 && time - start_time > time_left)
+		{
+			printf("%lld ms philo: %d died-----------\n", time
+				- philo->time.start, philo->id);
+			philo->watch->dead = 1;
+			pthread_mutex_unlock(&philo->watch->watch_lock);
+			return (1);
+		}
+		else if (philo->watch->dead == 1)
+		{
+			printf("%lld ms philo check: %d \n", time - philo->time.start,
+				philo->id);
+			pthread_mutex_unlock(&philo->watch->watch_lock);
+			return (1);
+		}
+		pthread_mutex_unlock(&philo->watch->watch_lock);
+		if (time >= end_time)
+			break ;
+		usleep(1000); 
+	}
+	if (time_left != -100)
+		return (time_left - (time - start_time));
+	return (0);
+}
+/*
+int	ft_usleep(long long activity_time, int time_left, t_philo *philo)
+{
+	long long	end_time;
+	long long	time;
+	long long	start_time;
 	t_watch *watch;
+	
+
+	time = current_time();
+	start_time = time;
+	end_time = time + activity_time;
+	pthread_mutex_lock(&philo->watch);
+	watch = get_watch();
+	
+	while (1)
+	{
+		time = current_time();
+		pthread_mutex_lock(&watch->watch_lock);
+		if (time_left != -100 && time - start_time > time_left)
+		{
+			printf("%lld ms philo: %d died-----------\n", time
+				- philo->time.start, philo->id);
+			watch->dead = 1;
+			pthread_mutex_unlock(&watch->watch_lock);
+			return (1);
+		}
+		else if (watch->dead == 1)
+		{
+			printf("%lld ms philo check: %d \n", time - philo->time.start,
+				philo->id);
+			pthread_mutex_unlock(&watch->watch_lock);
+			return (1);
+		}
+		pthread_mutex_unlock(&watch->watch_lock);
+		if (time >= end_time)
+			break ;
+		usleep(1000); 
+	}
+	pthread_mutex_unlock(&philo->watch);
+	if (time_left != -100)
+		return (time_left - (time - start_time));
+	return (0);
+}*/
+/*
+
+int	ft_usleep(long long activity_time, int time_left, t_philo *philo)
+{
+	long long	end_time;
+	long long	time;
+	long long	start_time;
+	t_watch		*watch;
+
 	time = current_time();
 	start_time = time;
 	end_time = time + activity_time;
@@ -66,21 +153,29 @@ int	ft_usleep(long long activity_time, int time_left, t_philo *philo)
 	while (1)
 	{
 		time = current_time();
-
+		pthread_mutex_lock(&watch->watch_lock);
 		if (time_left != -100 && time - start_time > time_left)
 		{
-			printf("------------------------------------philo died\n");
-			pthread_mutex_lock(&watch->watch_lock);
+			printf("%lld ms philo: %d died-----------\n", time
+				- philo->time.start, philo->id);
 			watch->dead = 1;
 			pthread_mutex_unlock(&watch->watch_lock);
 			return (1);
 		}
-
-		if (time == end_time || time > end_time)
+		else if (watch->dead == 1)
+		{
+			printf("%lld ms philo check: %d \n", time - philo->time.start,
+				philo->id);
+			pthread_mutex_unlock(&watch->watch_lock);
+			return (1);
+		}
+		pthread_mutex_unlock(&watch->watch_lock);
+		if (time >= end_time)
 			break ;
+		usleep(1000); 
 	}
 	if (time_left != -100)
-		return (time_left -= activity_time);
-
+		return (time_left - (time - start_time));
 	return (0);
 }
+*/
