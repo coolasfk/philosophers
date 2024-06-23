@@ -6,7 +6,7 @@
 /*   By: eprzybyl <eprzybyl@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 23:49:55 by eprzybyl          #+#    #+#             */
-/*   Updated: 2024/06/23 17:37:38 by eprzybyl         ###   ########.fr       */
+/*   Updated: 2024/06/23 19:38:59 by eprzybyl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ long long	current_time(void)
 	return (milliseconds);
 }
 
-int	ft_usleep(long long activity_time, int time_left, t_philo *philo)
+int	ft_usleep(long long activity_time, int time_left, t_philo *philo, int flag)
 {
 	long long	end_time;
 	long long	time;
@@ -72,6 +72,7 @@ int	ft_usleep(long long activity_time, int time_left, t_philo *philo)
 		if (dead(time, start_time, (long long)time_left, philo) == -10)
 			return (-10);
 		pthread_mutex_unlock(&philo->watch->watch_lock);
+		flag = print_info(flag, philo, time);
 	}
 	time_left = time_left - (time - start_time);
 	return (time_left);
@@ -80,16 +81,25 @@ int	ft_usleep(long long activity_time, int time_left, t_philo *philo)
 int	dead(long long time, long long start_time, long long time_left,
 		t_philo *philo)
 {
-	if (time - start_time > time_left)
+	if (philo->time.time_to_die > philo->time.time_to_eat
+		+ philo->time.time_to_sleep + philo->time.time_to_eat)
+		return (0);
+	if (philo->time.time_to_eat <= philo->time.time_to_sleep)
+	{
+		if (philo->time.time_to_die > philo->time.time_to_eat
+			+ philo->time.time_to_eat)
+			return (0);
+	}
+	if (philo->watch->dead == 1)
+	{
+		pthread_mutex_unlock(&philo->watch->watch_lock);
+		return (-10);
+	}
+	else if (time - start_time > time_left)
 	{
 		printf("%lld ms philo: %d died :(\n", time - philo->time.start,
 			philo->id);
 		philo->watch->dead = 1;
-		pthread_mutex_unlock(&philo->watch->watch_lock);
-		return (-10);
-	}
-	else if (philo->watch->dead == 1)
-	{
 		pthread_mutex_unlock(&philo->watch->watch_lock);
 		return (-10);
 	}

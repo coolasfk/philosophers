@@ -6,7 +6,7 @@
 /*   By: eprzybyl <eprzybyl@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 10:27:58 by eprzybyl          #+#    #+#             */
-/*   Updated: 2024/06/23 17:37:56 by eprzybyl         ###   ########.fr       */
+/*   Updated: 2024/06/23 19:27:48 by eprzybyl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,12 +82,14 @@ int					sleeping(t_philo *philo);
 int					locks_status(int left, int right, int lock, t_philo *philo);
 int					dead(long long time, long long start_time,
 						long long time_left, t_philo *philo);
+int					print_info(int flag, t_philo *philo, long long time);
 // time
 t_time				*set_time(char **argv, int argc);
 t_time				*get_time(void);
 int					ft_usleep(long long activity_time, int time_left,
-						t_philo *philo);
+						t_philo *philo, int flag);
 long long			current_time(void);
+// errors
 int					manage_error(char *str);
 // run_threads
 void				run_threads(t_philo *philo, int num_philo);

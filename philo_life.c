@@ -6,7 +6,7 @@
 /*   By: eprzybyl <eprzybyl@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 23:50:01 by eprzybyl          #+#    #+#             */
-/*   Updated: 2024/06/23 16:42:51 by eprzybyl         ###   ########.fr       */
+/*   Updated: 2024/06/23 19:38:16 by eprzybyl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	*philo_life(void *arg)
 	philo = (t_philo *)arg;
 	while (eaten < philo->time.times_needs_eat)
 	{
-		philo->time_left = ft_usleep(947483647, philo->time_left, philo);
+		philo->time_left = ft_usleep(947483647, philo->time_left, philo, 2);
 		if (philo->time_left == -10)
 			return (NULL);
 		if (eating(philo, &eaten) == 1)
@@ -39,20 +39,16 @@ int	eating(t_philo *philo, int *eaten)
 {
 	long long	time;
 
-	time = (long long)current_time();
 	pthread_mutex_lock(&philo->fork);
 	pthread_mutex_lock(&philo->next->fork);
 	locks_status(philo->id - 1, philo->next->id - 1, 1, philo);
-	printf("At: %lld Philosopher %d starts to eat :)\n", (time
-			- philo->time.start), philo->id);
-	if (ft_usleep(philo->time.time_to_eat, philo->time_left, philo) == -10)
+	if (ft_usleep(philo->time.time_to_eat, philo->time_left, philo, 0) == -10)
 	{
 		locks_status(philo->id - 1, philo->next->id - 1, 0, philo);
 		pthread_mutex_unlock(&philo->next->fork);
 		pthread_mutex_unlock(&philo->fork);
 		return (1);
 	}
-	philo->time_left = philo->time_left + philo->time.time_to_eat;
 	*eaten = *eaten + 1;
 	philo->time_left = philo->time.time_to_die;
 	time = (long long)current_time();
@@ -68,11 +64,8 @@ int	sleeping(t_philo *philo)
 {
 	long long	time;
 
-	time = (long long)current_time();
-	printf("%lld Philosopher %d starts to sleep :)\n", (time
-			- philo->time.start), philo->id);
 	philo->time_left = ft_usleep(philo->time.time_to_sleep, philo->time_left,
-			philo);
+			philo, 1);
 	if (philo->time_left == -10)
 		return (1);
 	time = (long long)current_time();
