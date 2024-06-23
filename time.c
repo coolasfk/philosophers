@@ -6,7 +6,7 @@
 /*   By: eprzybyl <eprzybyl@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 23:49:55 by eprzybyl          #+#    #+#             */
-/*   Updated: 2024/06/23 12:28:06 by eprzybyl         ###   ########.fr       */
+/*   Updated: 2024/06/23 14:37:47 by eprzybyl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,12 +70,13 @@ int	ft_usleep(long long activity_time, int time_left, t_philo *philo)
 		{
 			printf("-----------------------------philo %dwas thinking, time left: %lld\n", philo->id, (time_left - (time - start_time)));
 			break;
-		}		
+		}
+
 		pthread_mutex_lock(&philo->watch->watch_lock);
 		if (time - start_time > time_left)
 		{
-			printf("%lld ms philo: %d died-----------\n", time
-				- philo->time.start, philo->id);
+			printf("%lld ms philo: %d died-----------, time left %lld\n", time
+				- philo->time.start, philo->id, (time_left - (time - start_time) ));
 			philo->watch->dead = 1;
 			pthread_mutex_unlock(&philo->watch->watch_lock);
 			return (-10);
@@ -90,7 +91,6 @@ int	ft_usleep(long long activity_time, int time_left, t_philo *philo)
 		pthread_mutex_unlock(&philo->watch->watch_lock);
 		if (time >= end_time)
 			break ;
-		usleep(1000); 
 	}
 	time_left = time_left - (time - start_time);
 		//printf("**************philo : %d time left whats left: %lld\n", philo->id, (time_left - (time - start_time)));

@@ -6,7 +6,7 @@
 /*   By: eprzybyl <eprzybyl@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 23:50:01 by eprzybyl          #+#    #+#             */
-/*   Updated: 2024/06/23 11:43:27 by eprzybyl         ###   ########.fr       */
+/*   Updated: 2024/06/23 14:19:38 by eprzybyl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,12 +44,7 @@ int	eating(t_philo *philo, int *eaten)
 	long long	time;
 
 	time = (long long)current_time();
-	// pthread_mutex_lock(&philo->lock);
-	/*
-	while (locks_status(philo->id - 1, philo->next->id - 1, 2, philo) == 1)
-	{
-		usleep(10000);
-	}*/
+	
 	printf("array check eating\n");
 	// pthread_mutex_unlock(&philo->lock);
 	time = (long long)current_time();
