@@ -6,7 +6,7 @@
 /*   By: eprzybyl <eprzybyl@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 23:50:01 by eprzybyl          #+#    #+#             */
-/*   Updated: 2024/06/22 22:03:21 by eprzybyl         ###   ########.fr       */
+/*   Updated: 2024/06/23 11:43:27 by eprzybyl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,9 @@ void	*philo_life(void *arg)
 	philo = (t_philo *)arg;
 	while (eaten < philo->time.times_needs_eat)
 	{
+		philo->time_left = ft_usleep(947483647, philo->time_left, philo);
+		if (philo->time_left == -10)
+			return (NULL);
 		if (eating(philo, &eaten) == 1)
 			return (NULL);
 		if (eaten < philo->time.times_needs_eat)
@@ -42,10 +45,11 @@ int	eating(t_philo *philo, int *eaten)
 
 	time = (long long)current_time();
 	// pthread_mutex_lock(&philo->lock);
+	/*
 	while (locks_status(philo->id - 1, philo->next->id - 1, 2, philo) == 1)
 	{
 		usleep(10000);
-	}
+	}*/
 	printf("array check eating\n");
 	// pthread_mutex_unlock(&philo->lock);
 	time = (long long)current_time();
@@ -54,13 +58,14 @@ int	eating(t_philo *philo, int *eaten)
 	locks_status(philo->id - 1, philo->next->id - 1, 1, philo);
 	printf("At: %lld Philosopher %d starts to eat :)\n", (time
 			- philo->time.start), philo->id);
-	if (ft_usleep(philo->time.time_to_eat, -100, philo) == 1)
+	if (ft_usleep(philo->time.time_to_eat, philo->time_left, philo) == -10)
 	{
 		locks_status(philo->id - 1, philo->next->id - 1, 0, philo);
 		pthread_mutex_unlock(&philo->next->fork);
 		pthread_mutex_unlock(&philo->fork);
 		return (1);
 	}
+	philo->time_left = philo->time_left + philo->time.time_to_eat;
 	*eaten = *eaten + 1;
 	philo->time_left = philo->time.time_to_die;
 	time = (long long)current_time();
@@ -79,7 +84,9 @@ int	sleeping(t_philo *philo)
 	time = (long long)current_time();
 	printf("%lld Philosopher %d starts to sleep :)\n", (time
 			- philo->time.start), philo->id);
-	if (ft_usleep(philo->time.time_to_sleep, philo->time_left, philo) == 1)
+	philo->time_left = ft_usleep(philo->time.time_to_sleep, philo->time_left,
+			philo);
+	if (philo->time_left == -10)
 		return (1);
 	time = (long long)current_time();
 	printf("%lld Philosopher %d finishes to sleep :)\n", (time
@@ -91,8 +98,15 @@ int	sleeping(t_philo *philo)
 
 int	locks_status(int left, int right, int lock, t_philo *philo)
 {
+	//int i;
 	
 	pthread_mutex_lock(&philo->array->array_lock);
+	/*i = 0;
+	while(i < philo->total_philo)
+	{
+		printf("array for philo %d: %d\n", philo->id, philo->array->array[i]);
+		i++;
+	}*/
 	if (lock == 1)
 	{
 		philo->array->array[left] = 1;
@@ -107,12 +121,12 @@ int	locks_status(int left, int right, int lock, t_philo *philo)
 	{
 		if (philo->array->array[left] == 1 || philo->array->array[right] == 1)
 		{
-			//printf("---------------------philo is thinking \n");
-				pthread_mutex_unlock(&philo->array->array_lock);
+			// printf("---------------------philo is thinking \n");
+			pthread_mutex_unlock(&philo->array->array_lock);
 			return (1);
 		}
 	}
-		pthread_mutex_unlock(&philo->array->array_lock);
+	pthread_mutex_unlock(&philo->array->array_lock);
 	printf("array check\n");
 	return (0);
 }
@@ -183,37 +197,37 @@ int	locks_status(int left, int right, int lock, t_philo *philo)
 	return (0);
 }*/
 /*
-int locks_status(int left, int right, int lock, t_philo *philo)
+int	locks_status(int left, int right, int lock, t_philo *philo)
 {
-    t_array *array;
+	t_array *array;
 
-    pthread_mutex_lock(&philo->lock_array);
-    array = get_array(); // Assuming get_array is thread-safe
-    
-    // Lock the array's mutex to safely access/modify the array
-    pthread_mutex_lock(&array->array_lock);
-    if (lock == 1)
-    {
-        printf("yesss!---------\n");
-        array->array[left] = 1;
-        array->array[right] = 1;
-    }
-    else if (lock == 0)
-    {
-        array->array[left] = 0;
-        array->array[right] = 0;
-    }
-    else if (lock == 2)
-    {
-        if (array->array[left] == 1 || array->array[right] == 1)
-        {
-            pthread_mutex_unlock(&array->array_lock);
-            pthread_mutex_unlock(&philo->lock_array);
-            return 1;
-        }
-    }
-    pthread_mutex_unlock(&array->array_lock);
-    pthread_mutex_unlock(&philo->lock_array);
-    printf("array check\n");
-    return 0;
+	pthread_mutex_lock(&philo->lock_array);
+	array = get_array(); // Assuming get_array is thread-safe
+
+	// Lock the array's mutex to safely access/modify the array
+	pthread_mutex_lock(&array->array_lock);
+	if (lock == 1)
+	{
+		printf("yesss!---------\n");
+		array->array[left] = 1;
+		array->array[right] = 1;
+	}
+	else if (lock == 0)
+	{
+		array->array[left] = 0;
+		array->array[right] = 0;
+	}
+	else if (lock == 2)
+	{
+		if (array->array[left] == 1 || array->array[right] == 1)
+		{
+			pthread_mutex_unlock(&array->array_lock);
+			pthread_mutex_unlock(&philo->lock_array);
+			return (1);
+		}
+	}
+	pthread_mutex_unlock(&array->array_lock);
+	pthread_mutex_unlock(&philo->lock_array);
+	printf("array check\n");
+	return (0);
 }*/
