@@ -6,7 +6,7 @@
 /*   By: eprzybyl <eprzybyl@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/07 18:51:54 by eprzybyl          #+#    #+#             */
-/*   Updated: 2024/06/23 15:40:20 by eprzybyl         ###   ########.fr       */
+/*   Updated: 2024/06/23 22:42:22 by eprzybyl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,33 +29,7 @@ int	main(int argc, char *argv[])
 		return (1);
 	}
 	num_philos = ft_atoi(argv[1]);
-	run_threads(philo, num_philos);
-	clean_up(philo, num_philos);
-}
-
-void	clean_up(t_philo *philo, int num_philos)
-{
-	t_philo	*current;
-	t_philo	*next;
-	int		i;
-
-	i = 0;
-	current = philo;
-	while (i < num_philos)
-	{
-		pthread_join(current->thread, NULL);
-		pthread_mutex_destroy(&current->fork);
-		current = current->next;
-		i++;
-	}
-	i = 0;
-	current = philo;
-	while (i > num_philos)
-	{
-		next = current->next;
-		free(current);
-		current = next;
-	}
+	manage_threads(philo, num_philos);
 }
 
 t_watch	*set_watch(void)

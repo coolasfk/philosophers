@@ -6,7 +6,7 @@
 /*   By: eprzybyl <eprzybyl@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 23:50:06 by eprzybyl          #+#    #+#             */
-/*   Updated: 2024/06/23 16:48:39 by eprzybyl         ###   ########.fr       */
+/*   Updated: 2024/06/23 22:12:17 by eprzybyl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,14 +65,9 @@ t_philo	*build_new_node(t_philo *new_philo, int i, int num_philos)
 	new_philo->id = i;
 	time = get_time();
 	new_philo->time = *time;
-	new_philo->dead_philo = 0;
 	new_philo->time.start = current_time();
 	new_philo->time_left = time->time_to_die;
 	pthread_mutex_init(&new_philo->fork, NULL);
-	pthread_mutex_init(&new_philo->lock, NULL);
-	pthread_mutex_init(&new_philo->dead, NULL);
-	pthread_mutex_init(&new_philo->watch_lock, NULL);
-	pthread_mutex_init(&new_philo->lock_array, NULL);
 	new_philo->watch = set_watch();
 	new_philo->array = get_array();
 	new_philo->total_philo = num_philos;

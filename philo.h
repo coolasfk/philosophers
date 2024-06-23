@@ -6,7 +6,7 @@
 /*   By: eprzybyl <eprzybyl@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 10:27:58 by eprzybyl          #+#    #+#             */
-/*   Updated: 2024/06/23 19:27:48 by eprzybyl         ###   ########.fr       */
+/*   Updated: 2024/06/23 22:44:09 by eprzybyl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,12 +43,7 @@ typedef struct s_watch
 typedef struct s_philo
 {
 	int				id;
-	int				dead_philo;
 	pthread_mutex_t	fork;
-	pthread_mutex_t	lock;
-	pthread_mutex_t	dead;
-	pthread_mutex_t	watch_lock;
-	pthread_mutex_t	lock_array;
 	int				total_philo;
 	pthread_t		thread;
 	t_time			time;
@@ -73,7 +68,7 @@ int					ft_atoi(const char *s);
 // checks
 int					initial_check(int argc, char *argv[]);
 // kill_and clean
-void				clean_up(t_philo *philos, int num_philos);
+void				clean_up(t_philo *philos, int num_philo, int i);
 
 // philo_life
 void				*philo_life(void *arg);
@@ -92,5 +87,5 @@ long long			current_time(void);
 // errors
 int					manage_error(char *str);
 // run_threads
-void				run_threads(t_philo *philo, int num_philo);
+void				manage_threads(t_philo *philo, int num_philo);
 #endif

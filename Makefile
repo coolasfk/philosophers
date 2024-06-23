@@ -3,8 +3,10 @@ NAME = philo
 
 # Compiler
 CC = gcc 
-CFLAGS := -Wall -Wextra -Werror -fsanitize=thread -g
-LDFLAGS = -fsanitize=thread
+#CFLAGS := -Wall -Wextra -Werror -fsanitize=thread -g
+#LDFLAGS = -fsanitize=thread -lpthread
+CFLAGS := -Wall -Wextra -Werror
+#LDFLAGS = -lpthread
 
 # Source files
 SRC = main.c \
@@ -12,7 +14,7 @@ SRC = main.c \
 	philo_life.c \
 	philo_init.c \
 	time.c \
-	run_threads.c \
+	manage_threads.c \
 	utils.c
 	  
 # Object files
@@ -26,8 +28,8 @@ all: $(NAME)
 
 # Rule to link the program
 $(NAME): $(OBJ) 
-	$(CC) $(OBJ) -o $(NAME) $(LDFLAGS)
-
+	$(CC) $(OBJ) -o $(NAME) 
+#$(LDFLAGS)
 # Rule to compile source files into object files
 %.o: %.c 
 	$(CC) $(CFLAGS) -c $< -o $@
