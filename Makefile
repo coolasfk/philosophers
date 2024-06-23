@@ -9,13 +9,11 @@ LDFLAGS = -fsanitize=thread
 # Source files
 SRC = main.c \
 	checks.c \
-	kill_and_clean.c \
 	philo_life.c \
 	philo_init.c \
 	time.c \
 	run_threads.c \
-	utils.c \
-	errors.c  \
+	utils.c
 	  
 # Object files
 OBJ = $(SRC:.c=.o)

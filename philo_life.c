@@ -6,7 +6,7 @@
 /*   By: eprzybyl <eprzybyl@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 23:50:01 by eprzybyl          #+#    #+#             */
-/*   Updated: 2024/06/23 14:19:38 by eprzybyl         ###   ########.fr       */
+/*   Updated: 2024/06/23 16:42:51 by eprzybyl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,6 @@ void	*philo_life(void *arg)
 				return (NULL);
 		}
 	}
-	if (eaten == philo->time.times_needs_eat && philo->id == philo->total_philo)
-	{
-		printf("yeyyeyeyeyyeyeyyes they all have eaten!!!\n");
-	}
 	return (NULL);
 }
 
@@ -43,10 +39,6 @@ int	eating(t_philo *philo, int *eaten)
 {
 	long long	time;
 
-	time = (long long)current_time();
-	
-	printf("array check eating\n");
-	// pthread_mutex_unlock(&philo->lock);
 	time = (long long)current_time();
 	pthread_mutex_lock(&philo->fork);
 	pthread_mutex_lock(&philo->next->fork);
@@ -93,15 +85,7 @@ int	sleeping(t_philo *philo)
 
 int	locks_status(int left, int right, int lock, t_philo *philo)
 {
-	//int i;
-	
 	pthread_mutex_lock(&philo->array->array_lock);
-	/*i = 0;
-	while(i < philo->total_philo)
-	{
-		printf("array for philo %d: %d\n", philo->id, philo->array->array[i]);
-		i++;
-	}*/
 	if (lock == 1)
 	{
 		philo->array->array[left] = 1;
@@ -114,115 +98,12 @@ int	locks_status(int left, int right, int lock, t_philo *philo)
 	}
 	else if (lock == 2)
 	{
-		if (philo->array->array[left] == 1 || philo->array->array[right] == 1)
+		if (philo->array->array[left] == 1 && philo->array->array[right] == 1)
 		{
-			// printf("---------------------philo is thinking \n");
 			pthread_mutex_unlock(&philo->array->array_lock);
 			return (1);
 		}
 	}
 	pthread_mutex_unlock(&philo->array->array_lock);
-	printf("array check\n");
 	return (0);
 }
-/*
-int	locks_status(int left, int right, int lock, t_philo *philo)
-{
-	static int	*array;
-	int			i;
-	t_array		*array;
-
-	pthread_mutex_lock(&philo->lock_array);
-	if (lock == 1)
-	{
-		philo->array[left] = 1;
-		philo->array[right] = 1;
-	}
-	else if (lock == 0)
-	{
-		philo->array[left] = 0;
-		philo->array[right] = 0;
-	}
-	else if (lock == 2)
-	{
-		if (philo->array[left] == 1 || philo->array[right] == 1)
-		{
-			printf("---------------------philo is thinking \n");
-			pthread_mutex_unlock(&philo->lock_array);
-			return (1);
-		}
-	}
-	pthread_mutex_unlock(&philo->lock_array);
-	printf("array check\n");
-	return (0);
-}*/
-/*
-int	locks_status(int left, int right, int lock, t_philo *philo)
-{
-	i = 0;
-	pthread_mutex_lock(&philo->lock_array);
-	array = (int *)malloc(sizeof(int) * philo->total_philo);
-	if (!array)
-		return (-1);
-	while (i < philo->total_philo)
-	{
-		array[i] = 0;
-		i++;
-	}
-	if (lock == 1)
-	{
-		array[left] = 1;
-		array[right] = 1;
-	}
-	else if (lock == 0)
-	{
-		array[left] = 0;
-		array[right] = 0;
-	}
-	else if (lock == 2)
-	{
-		if (array[left] == 1 || array[right] == 1)
-		{
-			pthread_mutex_unlock(&philo->lock_array);
-			return (1);
-		}
-	}
-	pthread_mutex_unlock(&philo->lock_array);
-	printf("array check\n");
-	return (0);
-}*/
-/*
-int	locks_status(int left, int right, int lock, t_philo *philo)
-{
-	t_array *array;
-
-	pthread_mutex_lock(&philo->lock_array);
-	array = get_array(); // Assuming get_array is thread-safe
-
-	// Lock the array's mutex to safely access/modify the array
-	pthread_mutex_lock(&array->array_lock);
-	if (lock == 1)
-	{
-		printf("yesss!---------\n");
-		array->array[left] = 1;
-		array->array[right] = 1;
-	}
-	else if (lock == 0)
-	{
-		array->array[left] = 0;
-		array->array[right] = 0;
-	}
-	else if (lock == 2)
-	{
-		if (array->array[left] == 1 || array->array[right] == 1)
-		{
-			pthread_mutex_unlock(&array->array_lock);
-			pthread_mutex_unlock(&philo->lock_array);
-			return (1);
-		}
-	}
-	pthread_mutex_unlock(&array->array_lock);
-	pthread_mutex_unlock(&philo->lock_array);
-	printf("array check\n");
-	return (0);
-}*/

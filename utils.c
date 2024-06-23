@@ -6,7 +6,7 @@
 /*   By: eprzybyl <eprzybyl@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 10:02:04 by eprzybyl          #+#    #+#             */
-/*   Updated: 2024/06/19 10:32:23 by eprzybyl         ###   ########.fr       */
+/*   Updated: 2024/06/23 16:49:45 by eprzybyl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,16 +22,15 @@ int	ft_atoi(const char *s)
 	if (*s == '+' || *s == '-')
 	{
 		if (*s == '-')
-			return -1;
+			return (-1);
 		s++;
 	}
 	while (*s >= 48 && *s <= 57)
 	{
 		num = (num * 10) + (*s - 48);
-        if (num > 2147483647)
+		if (num > 2147483647)
 			return (-1);
 		s++;
 	}
 	return (num);
 }
-
