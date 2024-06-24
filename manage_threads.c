@@ -6,7 +6,7 @@
 /*   By: eprzybyl <eprzybyl@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 20:28:56 by eprzybyl          #+#    #+#             */
-/*   Updated: 2024/06/23 22:46:58 by eprzybyl         ###   ########.fr       */
+/*   Updated: 2024/06/24 00:02:34 by eprzybyl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ void	manage_threads(t_philo *philo, int num_philo)
 		}
 		philo = philo->next;
 		i++;
+		usleep(100);
 	}
 	clean_up(philo,  num_philo, -1);
 }

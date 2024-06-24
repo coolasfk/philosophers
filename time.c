@@ -6,7 +6,7 @@
 /*   By: eprzybyl <eprzybyl@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 23:49:55 by eprzybyl          #+#    #+#             */
-/*   Updated: 2024/06/23 23:24:23 by eprzybyl         ###   ########.fr       */
+/*   Updated: 2024/06/24 11:19:11 by eprzybyl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,12 +58,12 @@ int	ft_usleep(long long activity_time, int time_left, t_philo *philo, int flag)
 	long long	start_time;
 
 	time = current_time();
-	start_time = time;
 	end_time = time + activity_time;
+	start_time = time;
 	while (1)
 	{
-		if (activity_time == 947483647 && locks_status(philo->id - 1,
-				philo->next->id - 1, 2, philo) == 0)
+		if (activity_time == 947483647 && locks_status(philo->id
+				- 1, philo->next->id - 1, 2, philo) == 0)
 			break ;
 		time = current_time();
 		if (time >= end_time)
@@ -74,7 +74,11 @@ int	ft_usleep(long long activity_time, int time_left, t_philo *philo, int flag)
 		pthread_mutex_unlock(&philo->watch->watch_lock);
 		flag = print_info(flag, philo, time);
 	}
-	time_left = time_left - (time - start_time);
+	time = current_time();
+	if (activity_time != 947483647)
+		time_left = time_left - activity_time;
+	else	
+		time_left = time_left - (time - start_time);
 	return (time_left);
 }
 
@@ -84,9 +88,9 @@ int	dead(long long time, long long start_time, long long time_left,
 	if (philo->time.time_to_die > philo->time.time_to_eat
 		+ philo->time.time_to_sleep + philo->time.time_to_eat)
 		return (0);
-	if (philo->time.time_to_eat <= philo->time.time_to_sleep)
+	if (philo->time.time_to_eat >= philo->time.time_to_sleep)
 	{
-		if (philo->time.time_to_die > philo->time.time_to_eat
+		if (philo->time.time_to_die >= philo->time.time_to_eat
 			+ philo->time.time_to_eat)
 			return (0);
 	}
@@ -95,9 +99,10 @@ int	dead(long long time, long long start_time, long long time_left,
 		pthread_mutex_unlock(&philo->watch->watch_lock);
 		return (-10);
 	}
-	else if (time - start_time > time_left)
+	if (time - start_time >= time_left)
 	{
-		printf("%lld ms philo: %d died :(\n", time - philo->time.start,
+		time = current_time();
+		printf("-------------------%lld ms philo: %d died :(\n", time - philo->time.start,
 			philo->id);
 		philo->watch->dead = 1;
 		pthread_mutex_unlock(&philo->watch->watch_lock);

@@ -6,7 +6,7 @@
 /*   By: eprzybyl <eprzybyl@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 23:50:01 by eprzybyl          #+#    #+#             */
-/*   Updated: 2024/06/23 19:38:16 by eprzybyl         ###   ########.fr       */
+/*   Updated: 2024/06/24 11:09:05 by eprzybyl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	*philo_life(void *arg)
 	while (eaten < philo->time.times_needs_eat)
 	{
 		philo->time_left = ft_usleep(947483647, philo->time_left, philo, 2);
-		if (philo->time_left == -10)
+		if (philo->time_left < 1)
 			return (NULL);
 		if (eating(philo, &eaten) == 1)
 			return (NULL);
@@ -52,7 +52,7 @@ int	eating(t_philo *philo, int *eaten)
 	*eaten = *eaten + 1;
 	philo->time_left = philo->time.time_to_die;
 	time = (long long)current_time();
-	printf("At: %lld Philosopher %d finishes to eat :)\n", (time
+	printf("%lld ms philo: %d finished eating\n", (time
 			- philo->time.start), philo->id);
 	locks_status(philo->id - 1, philo->next->id - 1, 0, philo);
 	pthread_mutex_unlock(&philo->next->fork);
@@ -70,8 +70,6 @@ int	sleeping(t_philo *philo)
 		return (1);
 	time = (long long)current_time();
 	printf("%lld Philosopher %d finishes to sleep :)\n", (time
-			- philo->time.start), philo->id);
-	printf("%lld Philosopher %d starts to think :)\n", (time
 			- philo->time.start), philo->id);
 	return (0);
 }
@@ -91,7 +89,7 @@ int	locks_status(int left, int right, int lock, t_philo *philo)
 	}
 	else if (lock == 2)
 	{
-		if (philo->array->array[left] == 1 && philo->array->array[right] == 1)
+		if (philo->array->array[left] == 1 || philo->array->array[right] == 1)
 		{
 			pthread_mutex_unlock(&philo->array->array_lock);
 			return (1);
