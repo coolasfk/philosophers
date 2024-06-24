@@ -6,7 +6,7 @@
 /*   By: eprzybyl <eprzybyl@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 23:50:01 by eprzybyl          #+#    #+#             */
-/*   Updated: 2024/06/24 11:09:05 by eprzybyl         ###   ########.fr       */
+/*   Updated: 2024/06/24 13:12:21 by eprzybyl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,13 +32,13 @@ void	*philo_life(void *arg)
 				return (NULL);
 		}
 	}
+	if(philo->id == philo->total_philo && eaten == philo->time.times_needs_eat)
+	print_end(2);
 	return (NULL);
 }
 
 int	eating(t_philo *philo, int *eaten)
 {
-	long long	time;
-
 	pthread_mutex_lock(&philo->fork);
 	pthread_mutex_lock(&philo->next->fork);
 	locks_status(philo->id - 1, philo->next->id - 1, 1, philo);
@@ -51,9 +51,6 @@ int	eating(t_philo *philo, int *eaten)
 	}
 	*eaten = *eaten + 1;
 	philo->time_left = philo->time.time_to_die;
-	time = (long long)current_time();
-	printf("%lld ms philo: %d finished eating\n", (time
-			- philo->time.start), philo->id);
 	locks_status(philo->id - 1, philo->next->id - 1, 0, philo);
 	pthread_mutex_unlock(&philo->next->fork);
 	pthread_mutex_unlock(&philo->fork);
@@ -62,15 +59,10 @@ int	eating(t_philo *philo, int *eaten)
 
 int	sleeping(t_philo *philo)
 {
-	long long	time;
-
 	philo->time_left = ft_usleep(philo->time.time_to_sleep, philo->time_left,
 			philo, 1);
 	if (philo->time_left == -10)
 		return (1);
-	time = (long long)current_time();
-	printf("%lld Philosopher %d finishes to sleep :)\n", (time
-			- philo->time.start), philo->id);
 	return (0);
 }
 

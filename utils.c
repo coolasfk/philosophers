@@ -6,7 +6,7 @@
 /*   By: eprzybyl <eprzybyl@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 10:02:04 by eprzybyl          #+#    #+#             */
-/*   Updated: 2024/06/24 11:15:42 by eprzybyl         ###   ########.fr       */
+/*   Updated: 2024/06/24 13:07:18 by eprzybyl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,21 +41,50 @@ int	print_info(int flag, t_philo *philo, long long time)
 		return (5);
 	if (flag == 0)
 	{
+		printf("%lld ms philo: %d has taken a fork!\n", (time
+				- philo->time.start), philo->id);
 		flag = 5;
-		printf("%lld ms philo: %d starts to eat :)\n", (time
+		printf("%lld ms philo: %d starts eating :P\n", (time
 				- philo->time.start), philo->id);
 	}
 	else if (flag == 1)
 	{
 		flag = 5;
-		printf("%lld Philosopher %d starts to sleep :)\n", (time
+		printf("%lld ms philo: %d starts sleeping zzzzz...\n", (time
 				- philo->time.start), philo->id);
 	}
 	else if (flag == 2)
 	{
 		flag = 5;
-		printf("%lld ms philo: %d starts to think :)\n", (time
+		printf("%lld ms philo: %d starts thinking...\n", (time
 				- philo->time.start), philo->id);
 	}
 	return (flag);
+}
+
+void	print_end(int flag)
+{
+	if (flag == 1)
+	{
+		printf("  _____\n");
+		printf(" /     \\\n");
+		printf("| () () |\n");
+		printf(" \\  ^  /\n");
+		printf("  |||||\n");
+		printf("  |||||\n");
+		printf("\n");
+	}
+	if (flag == 2)
+	{
+		printf("\n");
+		printf("   *****       *****   \n");
+		printf(" *       *   *       * \n");
+		printf("*  O   O  * *  O   O  *\n");
+		printf("*    ^    * *    ^    *\n");
+		printf("*  \\___/  * *  \\___/  *\n");
+		printf(" *       *   *       * \n");
+		printf("   *****       *****   \n");
+		printf("\n");
+		printf("All philos eaten!\n");
+	}
 }

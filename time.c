@@ -6,7 +6,7 @@
 /*   By: eprzybyl <eprzybyl@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/18 23:49:55 by eprzybyl          #+#    #+#             */
-/*   Updated: 2024/06/24 11:19:11 by eprzybyl         ###   ########.fr       */
+/*   Updated: 2024/06/24 12:39:03 by eprzybyl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,8 @@ int	dead(long long time, long long start_time, long long time_left,
 	if (time - start_time >= time_left)
 	{
 		time = current_time();
-		printf("-------------------%lld ms philo: %d died :(\n", time - philo->time.start,
+		print_end(1);
+		printf("%lld ms philo: %d died :(\n", time - philo->time.start,
 			philo->id);
 		philo->watch->dead = 1;
 		pthread_mutex_unlock(&philo->watch->watch_lock);

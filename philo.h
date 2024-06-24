@@ -6,7 +6,7 @@
 /*   By: eprzybyl <eprzybyl@student.42lausanne.c    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/06/19 10:27:58 by eprzybyl          #+#    #+#             */
-/*   Updated: 2024/06/23 22:44:09 by eprzybyl         ###   ########.fr       */
+/*   Updated: 2024/06/24 12:38:13 by eprzybyl         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,7 @@ t_array				*set_array(char **argv);
 t_array				*get_array(void);
 // utils
 int					ft_atoi(const char *s);
+void	print_end(int flag);
 // checks
 int					initial_check(int argc, char *argv[]);
 // kill_and clean
